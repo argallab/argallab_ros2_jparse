@@ -485,11 +485,11 @@ class ArmController(Node):
             # 1) Forward kinematics
             # from IPython import embed; embed(banner1="computing jacobians")
             np_q = np.array(q)
-            if isinstance(np_q, np.ndarray):
-                print("The object is a NumPy array.")
-                self.get_logger().info(f'q: {np_q} {np_q}')
-            else:
-                print("The object is not a NumPy array.")
+            # if isinstance(np_q, np.ndarray):
+            #     print("The object is a NumPy array.")
+            #     self.get_logger().info(f'q: {np_q} {np_q}')
+            # else:
+            #     print("The object is not a NumPy array.")
             
             pin.forwardKinematics(model, data, np_q)  # needs to take in a numpy array
             pin.updateFramePlacements(model, data)
@@ -499,10 +499,10 @@ class ArmController(Node):
 
             # 3) Extract Jacobian
             J6 = data.J #J3 = data.J[:3, :] -- will give us only position so removing it
-            print(f'JACOBIAN: {J6}')
+            # print(f'JACOBIAN: {J6}')
             
             method = self.method #set by parameter, can be set from launch file
-            self.get_logger().info(f"Method being used: {method}")
+            # self.get_logger().info(f"Method being used: {method}")
             if method == "JacobianPseudoInverse":
                 raise NotImplementedError
             elif method == "JParse":
