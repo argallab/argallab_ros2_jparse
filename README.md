@@ -27,7 +27,7 @@ The `ros2_dev` branch is supporting *ROS 2 Jazzy*.
 ```
 ros2 launch xarm_moveit_config xarm7_moveit_realmove.launch.py robot_ip:=<add the robot ip> add_gripper:=true
 
-ros2 launch manipulator_control xarm_main_vel.launch use_teleop_control:=true use_teleop_control_jparse:=true
+ros2 launch manipulator_control xarm_main_vel.launch.xml use_teleop_control:=true use_teleop_control_jparse:=true
 
 ros2 launch xarm_teleop xarm_teleop.launch.xml JOY:=true paradigm:=3
 ```
@@ -57,8 +57,8 @@ Edits need to be still commpleted to test the robot after writing script for joy
 
 ## FOR ARGALLAB TO DOS (not in order of to do):
 - [x] Need to implement gripper in the `xarm_vel_experimenter.py` -- this is a function call to the api!!! the topic is `/gripper_action`
-- [ ] self-avoidance collision -- waiting for ros 2 port
-- [ ] work-around for the joint limits so that the robot does *not* immediately need to be power cycled -- waiting for ros 2 port
+- [x] self-avoidance collision -- waiting for ros 2 port
+- [x] work-around for the joint limits so that the robot does *not* immediately need to be power cycled -- waiting for ros 2 port
 - [x] port to ros2 (need pinnochio)
 
 

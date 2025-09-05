@@ -22,6 +22,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-robot-state-publisher \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
     ros-${ROS_DISTRO}-pinocchio \
+    ros-${ROS_DISTRO}-gz-ros2-control-demos \
+    ros-${ROS_DISTRO}-gz-ros2-control \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # install packages
