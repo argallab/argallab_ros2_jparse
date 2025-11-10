@@ -479,7 +479,8 @@ class ArmController(Node):
             self.current_positions = q
             # Calculate the JParsed Jacobian
             # NEW # 8/8/2025
-            urdf_filename = "/workspace/xarm7.urdf"
+            # TODO(Sharwin or Demiana): Use pinocchio function to access example instead of public repo
+            urdf_filename = "/home/workspace/src/example-robot-data/robots/xarm_description/urdf/xarm7.urdf"
             model = pin.buildModelFromUrdf(urdf_filename) # the model structure of the robot
             data = model.createData() # the data structure of the robot 
             # 1) Forward kinematics
