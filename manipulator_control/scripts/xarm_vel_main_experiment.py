@@ -137,6 +137,8 @@ class ArmController(Node):
             JointState, joint_states_topic, self.joint_states_callback, 10, callback_group=js_cb_g)
         self.teleop_control_sub = self.create_subscription(
             TwistStamped, 'robot_action', self.teleop_control_callback, 1, callback_group=js_cb_g)
+        self.joint_vel_control_sub = self.create_subscription(
+            JointTrajectoryPoint, 'joint_vel_control', self.joint_vel_control_callback, 1, callback_group=js_cb_g)
         self.gripper_action_sub = self.create_subscription(
             Float32, '/gripper_action', self.gripper_position_callback, 1, callback_group=js_cb_g)
         
@@ -180,7 +182,7 @@ class ArmController(Node):
         """
         self.joint_states = msg
 
-    def teleop_control_callback(self, msg):
+    def teleop_control_callback(self, msg: TwistStamped):
         """
         Callback function for the teleop_control topic (if using an interface). This function will be called whenever a new message is received
         on the teleop_control topic. The message is a geometry_msgs/TwistStamped message, which contains the current
@@ -195,6 +197,12 @@ class ArmController(Node):
         if position_velocity_norm > 0.05:
             position_velocity = position_velocity / position_velocity_norm * 0.05
         self.teleop_control_command = np.array([position_velocity[0], position_velocity[1],position_velocity[2],angular_velocity[0],angular_velocity[1],angular_velocity[2]])        #check if norm of the space mouse command is greater than 0.05, if so normalize it to this value
+
+    def joint_vel_control_callback(self, msg: JointTrajectoryPoint):
+        # Convert JointTrajectory into a list of list of joint velocities
+        joint_vels: list[float] = msg.velocities
+        self.command_joint_velocities(joint_vels)
+
 
     ##########################################################################################################
     ####################################### HELPER FUNCTIONS #################################################
@@ -409,7 +417,7 @@ class ArmController(Node):
             self.position_error_pub.publish(position_error_msg)
             self.orientation_error_pub.publish(orientation_error_msg)
 
-    def command_joint_velocities(self, joint_vel_list):
+    def command_joint_velocities(self, joint_vel_list: list[float]):
         """
         This function commands the joint velocities to the robot using the appropriate ROS message type.
         """
@@ -445,7 +453,7 @@ class ArmController(Node):
             trajectory_msg.header.stamp = self.get_clock().now().to_msg()  # Update timestamp
             self.joint_vel_pub.publish(trajectory_msg)
         else:
-            # this is on the real robot, directly send joint velociteies
+            # this is on the real robot, directly send joint velocities
             # Send joint velocities to the arm
             # log the velocities
             if self.use_teleop_control_jparse:
